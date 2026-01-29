@@ -1,0 +1,2714 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma-world"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model access_requirement {
+  mapId                 Int     @db.UnsignedInt
+  difficulty            Int     @default(0) @db.UnsignedTinyInt
+  level_min             Int     @default(0) @db.UnsignedTinyInt
+  level_max             Int     @default(0) @db.UnsignedTinyInt
+  item_level            Int     @default(0) @db.UnsignedSmallInt
+  item                  Int     @default(0) @db.UnsignedInt
+  item2                 Int     @default(0) @db.UnsignedInt
+  quest_done_A          Int     @default(0) @db.UnsignedInt
+  quest_done_H          Int     @default(0) @db.UnsignedInt
+  completed_achievement Int     @default(0) @db.UnsignedInt
+  quest_failed_text     String? @db.MediumText
+  comment               String? @db.MediumText
+
+  @@id([mapId, difficulty])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model achievement_criteria_data {
+  criteria_id Int
+  type        Int    @default(0) @db.UnsignedTinyInt
+  value1      Int    @default(0) @db.UnsignedInt
+  value2      Int    @default(0) @db.UnsignedInt
+  ScriptName  String @default("") @db.Char(64)
+
+  @@id([criteria_id, type])
+}
+
+model achievement_dbc {
+  ID              Int @id @db.UnsignedInt
+  requiredFaction Int @default(-1)
+  mapID           Int @default(-1)
+  points          Int @default(0) @db.UnsignedInt
+  flags           Int @default(0) @db.UnsignedInt
+  count           Int @default(0) @db.UnsignedInt
+  refAchievement  Int @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model achievement_reward {
+  ID             Int     @id @default(0) @db.UnsignedInt
+  TitleA         Int     @default(0) @db.UnsignedInt
+  TitleH         Int     @default(0) @db.UnsignedInt
+  ItemID         Int     @default(0) @db.UnsignedInt
+  Sender         Int     @default(0) @db.UnsignedInt
+  Subject        String? @db.VarChar(255)
+  Body           String? @db.MediumText
+  MailTemplateID Int     @default(0) @db.UnsignedInt
+}
+
+model achievement_reward_locale {
+  ID      Int     @default(0) @db.UnsignedInt
+  Locale  String  @db.VarChar(4)
+  Subject String? @db.MediumText
+  Body    String? @db.MediumText
+
+  @@id([ID, Locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model areatrigger_involvedrelation {
+  id    Int @id @default(0) @db.UnsignedInt
+  quest Int @default(0) @db.UnsignedInt
+}
+
+model areatrigger_scripts {
+  entry      Int    @id
+  ScriptName String @db.Char(64)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model areatrigger_tavern {
+  id   Int     @id @default(0) @db.UnsignedInt
+  name String? @db.MediumText
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model areatrigger_teleport {
+  ID                 Int     @id @default(0) @db.UnsignedInt
+  Name               String? @db.MediumText
+  target_map         Int     @default(0) @db.UnsignedSmallInt
+  target_position_x  Float   @default(0) @db.Float
+  target_position_y  Float   @default(0) @db.Float
+  target_position_z  Float   @default(0) @db.Float
+  target_orientation Float   @default(0) @db.Float
+  VerifiedBuild      Int?
+
+  @@fulltext([Name], map: "name")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model battlefield_template {
+  TypeId     Int     @db.UnsignedTinyInt
+  ScriptName String  @default("") @db.VarChar(64)
+  comment    String? @db.MediumText
+
+  @@ignore
+}
+
+model battleground_door_object {
+  entry Int @db.UnsignedMediumInt
+  map   Int @db.UnsignedMediumInt
+  type  Int @db.UnsignedTinyInt
+
+  @@id([entry, map])
+}
+
+model battleground_sets {
+  set          Int   @db.UnsignedMediumInt
+  battleground Int   @db.UnsignedMediumInt
+  weight       Float @db.Float
+
+  @@id([set, battleground])
+}
+
+model battleground_template {
+  ID                Int    @id @default(0) @db.UnsignedInt
+  MinPlayersPerTeam Int    @default(0) @db.UnsignedSmallInt
+  MaxPlayersPerTeam Int    @default(0) @db.UnsignedSmallInt
+  MinLvl            Int    @default(0) @db.UnsignedTinyInt
+  MaxLvl            Int    @default(0) @db.UnsignedTinyInt
+  AllianceStartLoc  Int    @db.UnsignedInt
+  AllianceStartO    Float  @db.Float
+  HordeStartLoc     Int    @db.UnsignedInt
+  HordeStartO       Float  @db.Float
+  StartMaxDist      Float  @default(0) @db.Float
+  Weight            Int    @default(1) @db.UnsignedTinyInt
+  ScriptName        String @default("") @db.Char(64)
+  Comment           String @db.Char(32)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model battlemaster_entry {
+  entry       Int @id @default(0) @db.UnsignedInt
+  bg_template Int @default(0) @db.UnsignedInt
+}
+
+model broadcast_text {
+  ID             Int     @id @default(0) @db.UnsignedInt
+  LanguageID     Int     @default(0) @db.UnsignedInt
+  Text           String? @db.LongText
+  Text1          String? @db.LongText
+  EmoteID1       Int     @default(0) @db.UnsignedInt
+  EmoteID2       Int     @default(0) @db.UnsignedInt
+  EmoteID3       Int     @default(0) @db.UnsignedInt
+  EmoteDelay1    Int     @default(0) @db.UnsignedInt
+  EmoteDelay2    Int     @default(0) @db.UnsignedInt
+  EmoteDelay3    Int     @default(0) @db.UnsignedInt
+  SoundEntriesID Int     @default(0) @db.UnsignedInt
+  EmotesID       Int     @default(0) @db.UnsignedInt
+  Flags          Int     @default(0) @db.UnsignedInt
+  VerifiedBuild  Int     @default(0)
+}
+
+model broadcast_text_locale {
+  ID            Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  Text          String? @db.MediumText
+  Text1         String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([ID, locale])
+}
+
+model class_has_runes {
+  classID Int
+  raceID  Int
+
+  @@id([classID, raceID])
+}
+
+model class_stat_formulas {
+  class     Int @db.UnsignedMediumInt
+  stat_type Int @db.UnsignedMediumInt
+  class_out Int @db.UnsignedMediumInt
+
+  @@id([class, stat_type])
+}
+
+model class_stat_values {
+  class     Int   @db.UnsignedMediumInt
+  stat_type Int   @db.UnsignedMediumInt
+  value     Float @db.Float
+
+  @@id([class, stat_type])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model command {
+  name String  @id @default("") @db.VarChar(50)
+  help String? @db.LongText
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model conditions {
+  SourceTypeOrReferenceId  Int     @default(0)
+  SourceGroup              Int     @default(0) @db.UnsignedInt
+  SourceEntry              Int     @default(0)
+  SourceId                 Int     @default(0)
+  ElseGroup                Int     @default(0) @db.UnsignedInt
+  ConditionTypeOrReference Int     @default(0)
+  ConditionTarget          Int     @default(0) @db.UnsignedTinyInt
+  ConditionValue1          Int     @default(0) @db.UnsignedInt
+  ConditionValue2          Int     @default(0) @db.UnsignedInt
+  ConditionValue3          Int     @default(0) @db.UnsignedInt
+  NegativeCondition        Int     @default(0) @db.UnsignedTinyInt
+  ErrorType                Int     @default(0) @db.UnsignedInt
+  ErrorTextId              Int     @default(0) @db.UnsignedInt
+  ScriptName               String  @default("") @db.Char(64)
+  Comment                  String? @db.VarChar(255)
+
+  @@id([SourceTypeOrReferenceId, SourceGroup, SourceEntry, SourceId, ElseGroup, ConditionTypeOrReference, ConditionTarget, ConditionValue1, ConditionValue2, ConditionValue3])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature {
+  guid            Int     @id @default(autoincrement()) @db.UnsignedInt
+  id              Int     @default(0) @db.UnsignedInt
+  map             Int     @default(0) @db.UnsignedSmallInt
+  zoneId          Int     @default(0) @db.UnsignedSmallInt
+  areaId          Int     @default(0) @db.UnsignedSmallInt
+  spawnMask       Int     @default(1) @db.UnsignedTinyInt
+  phaseMask       Int     @default(1) @db.UnsignedInt
+  modelid         Int     @default(0) @db.UnsignedInt
+  equipment_id    Int     @default(0) @db.TinyInt
+  position_x      Float   @default(0) @db.Float
+  position_y      Float   @default(0) @db.Float
+  position_z      Float   @default(0) @db.Float
+  orientation     Float   @default(0) @db.Float
+  spawntimesecs   Int     @default(120) @db.UnsignedInt
+  wander_distance Float   @default(0) @db.Float
+  currentwaypoint Int     @default(0) @db.UnsignedInt
+  curhealth       Int     @default(1) @db.UnsignedInt
+  curmana         Int     @default(0) @db.UnsignedInt
+  MovementType    Int     @default(0) @db.UnsignedTinyInt
+  npcflag         Int     @default(0) @db.UnsignedInt
+  unit_flags      Int     @default(0) @db.UnsignedInt
+  dynamicflags    Int     @default(0) @db.UnsignedInt
+  ScriptName      String? @default("") @db.Char(64)
+  VerifiedBuild   Int?    @default(0)
+
+  @@index([id], map: "idx_id")
+  @@index([map], map: "idx_map")
+}
+
+model creature_addon {
+  guid                   Int     @id @default(0) @db.UnsignedInt
+  path_id                Int     @default(0) @db.UnsignedInt
+  mount                  Int     @default(0) @db.UnsignedInt
+  MountCreatureID        Int     @default(0) @db.UnsignedInt
+  StandState             Int     @default(0) @db.UnsignedTinyInt
+  AnimTier               Int     @default(0) @db.UnsignedTinyInt
+  VisFlags               Int     @default(0) @db.UnsignedTinyInt
+  SheathState            Int     @default(1) @db.UnsignedTinyInt
+  PvPFlags               Int     @default(0) @db.UnsignedTinyInt
+  emote                  Int     @default(0) @db.UnsignedInt
+  visibilityDistanceType Int     @default(0) @db.UnsignedTinyInt
+  auras                  String? @db.MediumText
+}
+
+model creature_classlevelstats {
+  level             Int     @db.UnsignedTinyInt
+  class             Int     @db.UnsignedTinyInt
+  basehp0           Int     @default(1) @db.UnsignedSmallInt
+  basehp1           Int     @default(1) @db.UnsignedSmallInt
+  basehp2           Int     @default(1) @db.UnsignedSmallInt
+  basemana          Int     @default(0) @db.UnsignedSmallInt
+  basearmor         Int     @default(1) @db.UnsignedSmallInt
+  attackpower       Int     @default(0) @db.UnsignedSmallInt
+  rangedattackpower Int     @default(0) @db.UnsignedSmallInt
+  damage_base       Float   @default(0) @db.Float
+  damage_exp1       Float   @default(0) @db.Float
+  damage_exp2       Float   @default(0) @db.Float
+  comment           String? @db.MediumText
+
+  @@id([level, class])
+}
+
+model creature_default_trainer {
+  CreatureId Int @id @db.UnsignedInt
+  TrainerId  Int @default(0) @db.UnsignedInt
+}
+
+model creature_equip_template {
+  CreatureID    Int  @default(0) @db.UnsignedInt
+  ID            Int  @default(1) @db.UnsignedTinyInt
+  ItemID1       Int  @default(0) @db.UnsignedInt
+  ItemID2       Int  @default(0) @db.UnsignedInt
+  ItemID3       Int  @default(0) @db.UnsignedInt
+  VerifiedBuild Int?
+
+  @@id([CreatureID, ID])
+}
+
+model creature_formations {
+  leaderGUID Int   @default(0) @db.UnsignedInt
+  memberGUID Int   @id @default(0) @db.UnsignedInt
+  dist       Float @db.Float
+  angle      Float @db.Float
+  groupAI    Int   @db.UnsignedInt
+  point_1    Int   @default(0) @db.UnsignedSmallInt
+  point_2    Int   @default(0) @db.UnsignedSmallInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_model_info {
+  DisplayID              Int   @id @default(0) @db.UnsignedInt
+  BoundingRadius         Float @default(0) @db.Float
+  CombatReach            Float @default(0) @db.Float
+  Gender                 Int   @default(2) @db.UnsignedTinyInt
+  DisplayID_Other_Gender Int   @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_movement_info {
+  MovementID Int    @id @default(0) @db.UnsignedInt
+  WalkSpeed  Float? @db.Float
+  RunSpeed   Float? @db.Float
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_movement_override {
+  SpawnId               Int  @id @default(0) @db.UnsignedInt
+  Ground                Int? @db.UnsignedTinyInt
+  Swim                  Int? @db.UnsignedTinyInt
+  Flight                Int? @db.UnsignedTinyInt
+  Rooted                Int? @db.UnsignedTinyInt
+  Chase                 Int? @db.UnsignedTinyInt
+  Random                Int? @db.UnsignedTinyInt
+  InteractionPauseTimer Int? @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_onkill_reputation {
+  creature_id          Int @id @default(0) @db.UnsignedInt
+  RewOnKillRepFaction1 Int @default(0) @db.SmallInt
+  RewOnKillRepFaction2 Int @default(0) @db.SmallInt
+  MaxStanding1         Int @default(0) @db.TinyInt
+  IsTeamAward1         Int @default(0) @db.TinyInt
+  RewOnKillRepValue1   Int @default(0)
+  MaxStanding2         Int @default(0) @db.TinyInt
+  IsTeamAward2         Int @default(0) @db.TinyInt
+  RewOnKillRepValue2   Int @default(0)
+  TeamDependent        Int @default(0) @db.UnsignedTinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_questender {
+  id    Int @default(0) @db.UnsignedInt
+  quest Int @default(0) @db.UnsignedInt
+
+  @@id([id, quest])
+}
+
+model creature_questitem {
+  CreatureEntry Int  @default(0) @db.UnsignedInt
+  Idx           Int  @default(0) @db.UnsignedInt
+  ItemId        Int  @default(0) @db.UnsignedInt
+  VerifiedBuild Int?
+
+  @@id([CreatureEntry, Idx])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_queststarter {
+  id    Int @default(0) @db.UnsignedInt
+  quest Int @default(0) @db.UnsignedInt
+
+  @@id([id, quest])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model creature_summon_groups {
+  summonerId   Int    @default(0) @db.UnsignedInt
+  summonerType Int    @default(0) @db.UnsignedTinyInt
+  groupId      Int    @default(0) @db.UnsignedTinyInt
+  entry        Int    @default(0) @db.UnsignedInt
+  position_x   Float  @default(0) @db.Float
+  position_y   Float  @default(0) @db.Float
+  position_z   Float  @default(0) @db.Float
+  orientation  Float  @default(0) @db.Float
+  summonType   Int    @default(0) @db.UnsignedTinyInt
+  summonTime   Int    @default(0) @db.UnsignedInt
+  Comment      String @default("") @db.VarChar(255)
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_template {
+  entry                    Int     @id @default(0) @db.UnsignedInt
+  difficulty_entry_1       Int     @default(0) @db.UnsignedInt
+  difficulty_entry_2       Int     @default(0) @db.UnsignedInt
+  difficulty_entry_3       Int     @default(0) @db.UnsignedInt
+  KillCredit1              Int     @default(0) @db.UnsignedInt
+  KillCredit2              Int     @default(0) @db.UnsignedInt
+  modelid1                 Int     @default(0) @db.UnsignedInt
+  modelid2                 Int     @default(0) @db.UnsignedInt
+  modelid3                 Int     @default(0) @db.UnsignedInt
+  modelid4                 Int     @default(0) @db.UnsignedInt
+  name                     String  @default("0") @db.Char(100)
+  subname                  String? @db.Char(100)
+  IconName                 String? @db.Char(100)
+  gossip_menu_id           Int     @default(0) @db.UnsignedInt
+  minlevel                 Int     @default(1) @db.UnsignedTinyInt
+  maxlevel                 Int     @default(1) @db.UnsignedTinyInt
+  exp                      Int     @default(0) @db.SmallInt
+  faction                  Int     @default(0) @db.UnsignedSmallInt
+  npcflag                  Int     @default(0) @db.UnsignedInt
+  speed_walk               Float   @default(1) @db.Float
+  speed_run                Float   @default(1.14286) @db.Float
+  scale                    Float   @default(1) @db.Float
+  rank                     Int     @default(0) @db.UnsignedTinyInt
+  dmgschool                Int     @default(0) @db.TinyInt
+  BaseAttackTime           Int     @default(0) @db.UnsignedInt
+  RangeAttackTime          Int     @default(0) @db.UnsignedInt
+  BaseVariance             Float   @default(1) @db.Float
+  RangeVariance            Float   @default(1) @db.Float
+  unit_class               Int     @default(0) @db.UnsignedTinyInt
+  unit_flags               Int     @default(0) @db.UnsignedInt
+  unit_flags2              Int     @default(0) @db.UnsignedInt
+  dynamicflags             Int     @default(0) @db.UnsignedInt
+  family                   Int     @default(0) @db.TinyInt
+  type                     Int     @default(0) @db.UnsignedTinyInt
+  type_flags               Int     @default(0) @db.UnsignedInt
+  lootid                   Int     @default(0) @db.UnsignedInt
+  pickpocketloot           Int     @default(0) @db.UnsignedInt
+  skinloot                 Int     @default(0) @db.UnsignedInt
+  PetSpellDataId           Int     @default(0) @db.UnsignedInt
+  VehicleId                Int     @default(0) @db.UnsignedInt
+  mingold                  Int     @default(0) @db.UnsignedInt
+  maxgold                  Int     @default(0) @db.UnsignedInt
+  AIName                   String  @default("") @db.Char(64)
+  MovementType             Int     @default(0) @db.UnsignedTinyInt
+  HoverHeight              Float   @default(1) @db.Float
+  HealthModifier           Float   @default(1) @db.Float
+  ManaModifier             Float   @default(1) @db.Float
+  ArmorModifier            Float   @default(1) @db.Float
+  DamageModifier           Float   @default(1) @db.Float
+  ExperienceModifier       Float   @default(1) @db.Float
+  RacialLeader             Int     @default(0) @db.UnsignedTinyInt
+  movementId               Int     @default(0) @db.UnsignedInt
+  RegenHealth              Int     @default(1) @db.UnsignedTinyInt
+  mechanic_immune_mask     Int     @default(0) @db.UnsignedInt
+  spell_school_immune_mask Int     @default(0) @db.UnsignedInt
+  flags_extra              Int     @default(0) @db.UnsignedInt
+  ScriptName               String  @default("") @db.Char(64)
+  VerifiedBuild            Int?
+
+  @@index([name], map: "idx_name")
+}
+
+model creature_template_addon {
+  entry                  Int     @id @default(0) @db.UnsignedInt
+  path_id                Int     @default(0) @db.UnsignedInt
+  mount                  Int     @default(0) @db.UnsignedInt
+  MountCreatureID        Int     @default(0) @db.UnsignedInt
+  StandState             Int     @default(0) @db.UnsignedTinyInt
+  AnimTier               Int     @default(0) @db.UnsignedTinyInt
+  VisFlags               Int     @default(0) @db.UnsignedTinyInt
+  SheathState            Int     @default(1) @db.UnsignedTinyInt
+  PvPFlags               Int     @default(0) @db.UnsignedTinyInt
+  emote                  Int     @default(0) @db.UnsignedInt
+  visibilityDistanceType Int     @default(0) @db.UnsignedTinyInt
+  auras                  String? @db.MediumText
+}
+
+model creature_template_locale {
+  entry         Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  Name          String? @db.MediumText
+  Title         String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([entry, locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_template_movement {
+  CreatureId            Int  @id @default(0) @db.UnsignedInt
+  Ground                Int? @db.UnsignedTinyInt
+  Swim                  Int? @db.UnsignedTinyInt
+  Flight                Int? @db.UnsignedTinyInt
+  Rooted                Int? @db.UnsignedTinyInt
+  Chase                 Int? @db.UnsignedTinyInt
+  Random                Int? @db.UnsignedTinyInt
+  InteractionPauseTimer Int? @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model creature_template_outfits {
+  entry       Int     @id @db.UnsignedInt
+  npcsoundsid Int     @default(0) @db.UnsignedInt
+  race        Int     @default(1) @db.UnsignedTinyInt
+  class       Int     @default(1) @db.UnsignedTinyInt
+  gender      Int     @default(0) @db.UnsignedTinyInt
+  skin        Int     @default(0) @db.UnsignedTinyInt
+  face        Int     @default(0) @db.UnsignedTinyInt
+  hair        Int     @default(0) @db.UnsignedTinyInt
+  haircolor   Int     @default(0) @db.UnsignedTinyInt
+  facialhair  Int     @default(0) @db.UnsignedTinyInt
+  head        Int     @default(0)
+  shoulders   Int     @default(0)
+  body        Int     @default(0)
+  chest       Int     @default(0)
+  waist       Int     @default(0)
+  legs        Int     @default(0)
+  feet        Int     @default(0)
+  wrists      Int     @default(0)
+  hands       Int     @default(0)
+  back        Int     @default(0)
+  tabard      Int     @default(0)
+  guildid     Int     @default(0) @db.UnsignedInt
+  mainhand    Int     @default(-1)
+  offhand     Int     @default(-1)
+  ranged      Int     @default(-1)
+  description String? @db.Text
+}
+
+model creature_template_resistance {
+  CreatureID    Int  @db.UnsignedInt
+  School        Int  @db.UnsignedTinyInt
+  Resistance    Int? @db.SmallInt
+  VerifiedBuild Int?
+
+  @@id([CreatureID, School])
+}
+
+model creature_template_spell {
+  CreatureID    Int  @db.UnsignedInt
+  Index         Int  @default(0) @db.UnsignedTinyInt
+  Spell         Int  @db.UnsignedInt
+  VerifiedBuild Int?
+
+  @@id([CreatureID, Index])
+}
+
+model creature_text {
+  CreatureID      Int     @default(0) @db.UnsignedInt
+  GroupID         Int     @default(0) @db.UnsignedTinyInt
+  ID              Int     @default(0) @db.UnsignedTinyInt
+  Text            String? @db.LongText
+  Type            Int     @default(0) @db.UnsignedTinyInt
+  Language        Int     @default(0) @db.TinyInt
+  Probability     Float   @default(0) @db.Float
+  Emote           Int     @default(0) @db.UnsignedInt
+  Duration        Int     @default(0) @db.UnsignedInt
+  Sound           Int     @default(0) @db.UnsignedInt
+  BroadcastTextId Int     @default(0)
+  TextRange       Int     @default(0) @db.UnsignedTinyInt
+  comment         String? @default("") @db.VarChar(255)
+
+  @@id([CreatureID, GroupID, ID])
+}
+
+model creature_text_locale {
+  CreatureID Int     @default(0) @db.UnsignedInt
+  GroupID    Int     @default(0) @db.UnsignedTinyInt
+  ID         Int     @default(0) @db.UnsignedTinyInt
+  Locale     String  @db.VarChar(4)
+  Text       String? @db.MediumText
+
+  @@id([CreatureID, GroupID, ID, Locale])
+}
+
+model disables {
+  sourceType Int    @db.UnsignedInt
+  entry      Int    @db.UnsignedInt
+  flags      Int    @db.SmallInt
+  params_0   String @default("") @db.VarChar(255)
+  params_1   String @default("") @db.VarChar(255)
+  comment    String @default("") @db.VarChar(255)
+
+  @@id([sourceType, entry])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model disenchant_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model event_scripts {
+  id        Int    @default(0) @db.UnsignedInt
+  delay     Int    @default(0) @db.UnsignedInt
+  command   Int    @default(0) @db.UnsignedInt
+  datalong  Int    @default(0) @db.UnsignedInt
+  datalong2 Int    @default(0) @db.UnsignedInt
+  dataint   Int    @default(0)
+  x         Float  @default(0) @db.Float
+  y         Float  @default(0) @db.Float
+  z         Float  @default(0) @db.Float
+  o         Float  @default(0) @db.Float
+  Comment   String @default("") @db.VarChar(255)
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model exploration_basexp {
+  level  Int @id @default(0) @db.UnsignedTinyInt
+  basexp Int @default(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model fishing_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event {
+  eventEntry   Int       @id @db.UnsignedTinyInt
+  start_time   DateTime? @db.Timestamp(0)
+  end_time     DateTime? @db.Timestamp(0)
+  occurence    BigInt    @default(5184000) @db.UnsignedBigInt
+  length       BigInt    @default(2592000) @db.UnsignedBigInt
+  holiday      Int       @default(0) @db.UnsignedInt
+  holidayStage Int       @default(0) @db.UnsignedTinyInt
+  description  String?   @db.VarChar(255)
+  world_event  Int       @default(0) @db.UnsignedTinyInt
+  announce     Int?      @default(2) @db.UnsignedTinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_arena_seasons {
+  eventEntry Int @db.UnsignedTinyInt
+  season     Int @db.UnsignedTinyInt
+
+  @@unique([season, eventEntry], map: "season")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_battleground_holiday {
+  EventEntry     Int @id @db.UnsignedTinyInt
+  BattlegroundID Int @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_condition {
+  eventEntry             Int      @db.UnsignedTinyInt
+  condition_id           Int      @default(0) @db.UnsignedInt
+  req_num                Float?   @default(0) @db.Float
+  max_world_state_field  Int      @default(0) @db.UnsignedSmallInt
+  done_world_state_field Int      @default(0) @db.UnsignedSmallInt
+  description            String   @default("") @db.VarChar(25)
+  auto_broadcast         Boolean? @default(true)
+
+  @@id([eventEntry, condition_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_creature {
+  eventEntry Int @db.TinyInt
+  guid       Int @db.UnsignedInt
+
+  @@id([guid, eventEntry])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_creature_quest {
+  eventEntry Int @db.UnsignedTinyInt
+  id         Int @default(0) @db.UnsignedInt
+  quest      Int @default(0) @db.UnsignedInt
+
+  @@id([id, quest])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_gameobject {
+  eventEntry Int @db.TinyInt
+  guid       Int @db.UnsignedInt
+
+  @@id([guid, eventEntry])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_gameobject_quest {
+  eventEntry Int @db.UnsignedTinyInt
+  id         Int @default(0) @db.UnsignedInt
+  quest      Int @default(0) @db.UnsignedInt
+
+  @@id([id, quest, eventEntry])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_model_equip {
+  eventEntry   Int @db.TinyInt
+  guid         Int @id @default(0) @db.UnsignedInt
+  modelid      Int @default(0) @db.UnsignedInt
+  equipment_id Int @default(0) @db.UnsignedTinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_npc_vendor {
+  eventEntry   Int @db.TinyInt
+  guid         Int @default(0) @db.UnsignedInt
+  slot         Int @default(0) @db.SmallInt
+  item         Int @default(0) @db.UnsignedInt
+  maxcount     Int @default(0) @db.UnsignedInt
+  incrtime     Int @default(0) @db.UnsignedInt
+  ExtendedCost Int @default(0) @db.UnsignedInt
+
+  @@id([guid, item])
+  @@index([slot], map: "slot")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_npcflag {
+  eventEntry Int @db.UnsignedTinyInt
+  guid       Int @default(0) @db.UnsignedInt
+  npcflag    Int @default(0) @db.UnsignedInt
+
+  @@id([guid, eventEntry])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_pool {
+  eventEntry Int @db.TinyInt
+  pool_entry Int @id @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_prerequisite {
+  eventEntry         Int @db.UnsignedTinyInt
+  prerequisite_event Int @db.UnsignedInt
+
+  @@id([eventEntry, prerequisite_event])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_quest_condition {
+  eventEntry   Int    @db.UnsignedTinyInt
+  quest        Int    @id @default(0) @db.UnsignedInt
+  condition_id Int    @default(0) @db.UnsignedInt
+  num          Float? @default(0) @db.Float
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_event_seasonal_questrelation {
+  questId    Int @db.UnsignedInt
+  eventEntry Int @default(0) @db.UnsignedInt
+
+  @@id([questId, eventEntry])
+  @@index([questId], map: "idx_quest")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_tele {
+  id          Int    @id @db.UnsignedInt
+  position_x  Float  @default(0) @db.Float
+  position_y  Float  @default(0) @db.Float
+  position_z  Float  @default(0) @db.Float
+  orientation Float  @default(0) @db.Float
+  map         Int    @default(0) @db.UnsignedSmallInt
+  name        String @default("") @db.VarChar(100)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model game_weather {
+  zone                Int    @id @default(0) @db.UnsignedInt
+  spring_rain_chance  Int    @default(25) @db.UnsignedTinyInt
+  spring_snow_chance  Int    @default(25) @db.UnsignedTinyInt
+  spring_storm_chance Int    @default(25) @db.UnsignedTinyInt
+  summer_rain_chance  Int    @default(25) @db.UnsignedTinyInt
+  summer_snow_chance  Int    @default(25) @db.UnsignedTinyInt
+  summer_storm_chance Int    @default(25) @db.UnsignedTinyInt
+  fall_rain_chance    Int    @default(25) @db.UnsignedTinyInt
+  fall_snow_chance    Int    @default(25) @db.UnsignedTinyInt
+  fall_storm_chance   Int    @default(25) @db.UnsignedTinyInt
+  winter_rain_chance  Int    @default(25) @db.UnsignedTinyInt
+  winter_snow_chance  Int    @default(25) @db.UnsignedTinyInt
+  winter_storm_chance Int    @default(25) @db.UnsignedTinyInt
+  ScriptName          String @default("") @db.Char(64)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model gameobject {
+  guid          Int     @id @default(autoincrement()) @db.UnsignedInt
+  id            Int     @default(0) @db.UnsignedInt
+  map           Int     @default(0) @db.UnsignedSmallInt
+  zoneId        Int     @default(0) @db.UnsignedSmallInt
+  areaId        Int     @default(0) @db.UnsignedSmallInt
+  spawnMask     Int     @default(1) @db.UnsignedTinyInt
+  phaseMask     Int     @default(1) @db.UnsignedInt
+  position_x    Float   @default(0) @db.Float
+  position_y    Float   @default(0) @db.Float
+  position_z    Float   @default(0) @db.Float
+  orientation   Float   @default(0) @db.Float
+  rotation0     Float   @default(0) @db.Float
+  rotation1     Float   @default(0) @db.Float
+  rotation2     Float   @default(0) @db.Float
+  rotation3     Float   @default(0) @db.Float
+  spawntimesecs Int     @default(0)
+  animprogress  Int     @default(0) @db.UnsignedTinyInt
+  state         Int     @default(0) @db.UnsignedTinyInt
+  ScriptName    String? @default("") @db.Char(64)
+  VerifiedBuild Int?
+}
+
+model gameobject_addon {
+  guid              Int   @id @default(0) @db.UnsignedInt
+  parent_rotation0  Float @default(0) @db.Float
+  parent_rotation1  Float @default(0) @db.Float
+  parent_rotation2  Float @default(0) @db.Float
+  parent_rotation3  Float @default(1) @db.Float
+  invisibilityType  Int   @default(0) @db.UnsignedTinyInt
+  invisibilityValue Int   @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model gameobject_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+model gameobject_overrides {
+  spawnId Int @id @default(0) @db.UnsignedInt
+  faction Int @default(0) @db.UnsignedSmallInt
+  flags   Int @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model gameobject_questender {
+  id    Int @default(0) @db.UnsignedInt
+  quest Int @default(0) @db.UnsignedInt
+
+  @@id([id, quest])
+}
+
+model gameobject_questitem {
+  GameObjectEntry Int  @default(0) @db.UnsignedInt
+  Idx             Int  @default(0) @db.UnsignedInt
+  ItemId          Int  @default(0) @db.UnsignedInt
+  VerifiedBuild   Int?
+
+  @@id([GameObjectEntry, Idx])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model gameobject_queststarter {
+  id    Int @default(0) @db.UnsignedInt
+  quest Int @default(0) @db.UnsignedInt
+
+  @@id([id, quest])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model gameobject_template {
+  entry          Int    @id @default(0) @db.UnsignedInt
+  type           Int    @default(0) @db.UnsignedTinyInt
+  displayId      Int    @default(0) @db.UnsignedInt
+  name           String @default("") @db.VarChar(100)
+  IconName       String @default("") @db.VarChar(100)
+  castBarCaption String @default("") @db.VarChar(100)
+  unk1           String @default("") @db.VarChar(100)
+  size           Float  @default(1) @db.Float
+  Data0          Int    @default(0) @db.UnsignedInt
+  Data1          Int    @default(0)
+  Data2          Int    @default(0) @db.UnsignedInt
+  Data3          Int    @default(0) @db.UnsignedInt
+  Data4          Int    @default(0) @db.UnsignedInt
+  Data5          Int    @default(0) @db.UnsignedInt
+  Data6          Int    @default(0)
+  Data7          Int    @default(0) @db.UnsignedInt
+  Data8          Int    @default(0) @db.UnsignedInt
+  Data9          Int    @default(0) @db.UnsignedInt
+  Data10         Int    @default(0) @db.UnsignedInt
+  Data11         Int    @default(0) @db.UnsignedInt
+  Data12         Int    @default(0) @db.UnsignedInt
+  Data13         Int    @default(0) @db.UnsignedInt
+  Data14         Int    @default(0) @db.UnsignedInt
+  Data15         Int    @default(0) @db.UnsignedInt
+  Data16         Int    @default(0) @db.UnsignedInt
+  Data17         Int    @default(0) @db.UnsignedInt
+  Data18         Int    @default(0) @db.UnsignedInt
+  Data19         Int    @default(0) @db.UnsignedInt
+  Data20         Int    @default(0) @db.UnsignedInt
+  Data21         Int    @default(0) @db.UnsignedInt
+  Data22         Int    @default(0) @db.UnsignedInt
+  Data23         Int    @default(0) @db.UnsignedInt
+  AIName         String @default("") @db.Char(64)
+  ScriptName     String @default("") @db.VarChar(64)
+  VerifiedBuild  Int?
+
+  @@index([name], map: "idx_name")
+}
+
+model gameobject_template_addon {
+  entry   Int @id @default(0) @db.UnsignedInt
+  faction Int @default(0) @db.UnsignedSmallInt
+  flags   Int @default(0) @db.UnsignedInt
+  mingold Int @default(0) @db.UnsignedInt
+  maxgold Int @default(0) @db.UnsignedInt
+  artkit0 Int @default(0)
+  artkit1 Int @default(0)
+  artkit2 Int @default(0)
+  artkit3 Int @default(0)
+}
+
+model gameobject_template_locale {
+  entry          Int     @default(0) @db.UnsignedInt
+  locale         String  @db.VarChar(4)
+  name           String? @db.MediumText
+  castBarCaption String? @db.MediumText
+  VerifiedBuild  Int?
+
+  @@id([entry, locale])
+}
+
+model gossip_menu {
+  MenuID        Int @default(0) @db.UnsignedSmallInt
+  TextID        Int @default(0) @db.UnsignedInt
+  VerifiedBuild Int @default(0)
+
+  @@id([MenuID, TextID])
+}
+
+model gossip_menu_option {
+  MenuID                Int     @default(0) @db.UnsignedSmallInt
+  OptionID              Int     @default(0) @db.UnsignedSmallInt
+  OptionIcon            Int     @default(0) @db.UnsignedInt
+  OptionText            String? @db.MediumText
+  OptionBroadcastTextID Int     @default(0)
+  OptionType            Int     @default(0) @db.UnsignedTinyInt
+  OptionNpcFlag         Int     @default(0) @db.UnsignedInt
+  ActionMenuID          Int     @default(0) @db.UnsignedInt
+  ActionPoiID           Int     @default(0) @db.UnsignedInt
+  BoxCoded              Int     @default(0) @db.UnsignedTinyInt
+  BoxMoney              Int     @default(0) @db.UnsignedInt
+  BoxText               String? @db.MediumText
+  BoxBroadcastTextID    Int     @default(0)
+  VerifiedBuild         Int     @default(0)
+
+  @@id([MenuID, OptionID])
+}
+
+model gossip_menu_option_locale {
+  MenuID     Int     @default(0) @db.UnsignedSmallInt
+  OptionID   Int     @default(0) @db.UnsignedSmallInt
+  Locale     String  @db.VarChar(4)
+  OptionText String? @db.MediumText
+  BoxText    String? @db.MediumText
+
+  @@id([MenuID, OptionID, Locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model graveyard_zone {
+  ID        Int     @default(0) @db.UnsignedInt
+  GhostZone Int     @default(0) @db.UnsignedInt
+  Faction   Int     @default(0) @db.UnsignedSmallInt
+  Comment   String? @db.MediumText
+
+  @@id([ID, GhostZone])
+}
+
+model holiday_dates {
+  id               Int @db.UnsignedInt
+  date_id          Int @db.UnsignedTinyInt
+  date_value       Int @db.UnsignedInt
+  holiday_duration Int @default(0) @db.UnsignedInt
+
+  @@id([id, date_id])
+}
+
+model instance_addon {
+  map        Int @id @db.UnsignedMediumInt
+  boss_count Int @db.UnsignedMediumInt
+}
+
+model instance_boss_boundary {
+  map        Int   @db.UnsignedMediumInt
+  boss       Int   @db.UnsignedMediumInt
+  index      Int   @db.UnsignedMediumInt
+  unionGroup Int   @db.UnsignedTinyInt
+  type       Int   @db.UnsignedTinyInt
+  inverted   Int   @db.UnsignedTinyInt
+  data0      Float @db.Float
+  data1      Float @db.Float
+  data2      Float @db.Float
+  data3      Float @db.Float
+  data4      Float @db.Float
+  data5      Float @db.Float
+
+  @@id([map, boss, index])
+}
+
+model instance_boss_creature {
+  guid Int @id @db.UnsignedMediumInt
+  map  Int @db.UnsignedMediumInt
+  boss Int @db.UnsignedMediumInt
+}
+
+model instance_door_object {
+  entry Int @db.UnsignedMediumInt
+  map   Int @db.UnsignedMediumInt
+  boss  Int @db.UnsignedMediumInt
+  type  Int @db.UnsignedTinyInt
+
+  @@id([entry, map])
+}
+
+model instance_encounter_achievement {
+  entry Int @id @db.UnsignedMediumInt
+  map   Int @db.UnsignedMediumInt
+  boss  Int @db.UnsignedMediumInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model instance_encounters {
+  entry                Int    @id @db.UnsignedInt
+  creditType           Int    @default(0) @db.UnsignedTinyInt
+  creditEntry          Int    @default(0) @db.UnsignedInt
+  lastEncounterDungeon Int    @default(0) @db.UnsignedSmallInt
+  comment              String @default("") @db.VarChar(255)
+}
+
+model instance_spawn_groups {
+  instanceMapId Int @db.UnsignedSmallInt
+  bossStateId   Int @db.UnsignedTinyInt
+  bossStates    Int @db.UnsignedTinyInt
+  spawnGroupId  Int @db.UnsignedInt
+  flags         Int @db.UnsignedTinyInt
+
+  @@id([instanceMapId, bossStateId, spawnGroupId, bossStates])
+}
+
+model instance_template {
+  map        Int    @id @db.UnsignedSmallInt
+  parent     Int    @db.UnsignedSmallInt
+  script     String @default("") @db.VarChar(128)
+  allowMount Int    @default(0) @db.UnsignedTinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model item_enchantment_template {
+  entry  Int   @default(0) @db.UnsignedInt
+  ench   Int   @default(0) @db.UnsignedInt
+  chance Float @default(0) @db.Float
+
+  @@id([entry, ench])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model item_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+model item_set_names {
+  entry         Int    @id @db.UnsignedInt
+  name          String @default("") @db.VarChar(255)
+  InventoryType Int    @default(0) @db.UnsignedTinyInt
+  VerifiedBuild Int?
+}
+
+model item_set_names_locale {
+  ID            Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  Name          String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([ID, locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model item_template {
+  entry                     Int    @id @default(0) @db.UnsignedInt
+  class                     Int    @default(0) @db.UnsignedTinyInt
+  subclass                  Int    @default(0) @db.UnsignedTinyInt
+  SoundOverrideSubclass     Int    @default(-1) @db.TinyInt
+  name                      String @default("") @db.VarChar(255)
+  displayid                 Int    @default(0) @db.UnsignedInt
+  Quality                   Int    @default(0) @db.UnsignedTinyInt
+  Flags                     Int    @default(0) @db.UnsignedInt
+  FlagsExtra                Int    @default(0) @db.UnsignedInt
+  BuyCount                  Int    @default(1) @db.UnsignedTinyInt
+  BuyPrice                  BigInt @default(0)
+  SellPrice                 Int    @default(0) @db.UnsignedInt
+  InventoryType             Int    @default(0) @db.UnsignedTinyInt
+  AllowableClass            Int    @default(-1)
+  AllowableRace             Int    @default(-1)
+  ItemLevel                 Int    @default(0) @db.UnsignedSmallInt
+  RequiredLevel             Int    @default(0) @db.UnsignedTinyInt
+  RequiredSkill             Int    @default(0) @db.UnsignedSmallInt
+  RequiredSkillRank         Int    @default(0) @db.UnsignedSmallInt
+  requiredspell             Int    @default(0) @db.UnsignedInt
+  requiredhonorrank         Int    @default(0) @db.UnsignedInt
+  RequiredCityRank          Int    @default(0) @db.UnsignedInt
+  RequiredReputationFaction Int    @default(0) @db.UnsignedSmallInt
+  RequiredReputationRank    Int    @default(0) @db.UnsignedSmallInt
+  maxcount                  Int    @default(0)
+  stackable                 Int?   @default(1)
+  ContainerSlots            Int    @default(0) @db.UnsignedTinyInt
+  StatsCount                Int    @default(0) @db.UnsignedTinyInt
+  stat_type1                Int    @default(0) @db.UnsignedTinyInt
+  stat_value1               Int    @default(0) @db.SmallInt
+  stat_type2                Int    @default(0) @db.UnsignedTinyInt
+  stat_value2               Int    @default(0) @db.SmallInt
+  stat_type3                Int    @default(0) @db.UnsignedTinyInt
+  stat_value3               Int    @default(0) @db.SmallInt
+  stat_type4                Int    @default(0) @db.UnsignedTinyInt
+  stat_value4               Int    @default(0) @db.SmallInt
+  stat_type5                Int    @default(0) @db.UnsignedTinyInt
+  stat_value5               Int    @default(0) @db.SmallInt
+  stat_type6                Int    @default(0) @db.UnsignedTinyInt
+  stat_value6               Int    @default(0) @db.SmallInt
+  stat_type7                Int    @default(0) @db.UnsignedTinyInt
+  stat_value7               Int    @default(0) @db.SmallInt
+  stat_type8                Int    @default(0) @db.UnsignedTinyInt
+  stat_value8               Int    @default(0) @db.SmallInt
+  stat_type9                Int    @default(0) @db.UnsignedTinyInt
+  stat_value9               Int    @default(0) @db.SmallInt
+  stat_type10               Int    @default(0) @db.UnsignedTinyInt
+  stat_value10              Int    @default(0) @db.SmallInt
+  ScalingStatDistribution   Int    @default(0) @db.SmallInt
+  ScalingStatValue          Int    @default(0) @db.UnsignedInt
+  dmg_min1                  Float  @default(0) @db.Float
+  dmg_max1                  Float  @default(0) @db.Float
+  dmg_type1                 Int    @default(0) @db.UnsignedTinyInt
+  dmg_min2                  Float  @default(0) @db.Float
+  dmg_max2                  Float  @default(0) @db.Float
+  dmg_type2                 Int    @default(0) @db.UnsignedTinyInt
+  armor                     Int    @default(0) @db.UnsignedSmallInt
+  holy_res                  Int    @default(0) @db.UnsignedTinyInt
+  fire_res                  Int    @default(0) @db.UnsignedTinyInt
+  nature_res                Int    @default(0) @db.UnsignedTinyInt
+  frost_res                 Int    @default(0) @db.UnsignedTinyInt
+  shadow_res                Int    @default(0) @db.UnsignedTinyInt
+  arcane_res                Int    @default(0) @db.UnsignedTinyInt
+  delay                     Int    @default(1000) @db.UnsignedSmallInt
+  ammo_type                 Int    @default(0) @db.UnsignedTinyInt
+  RangedModRange            Float  @default(0) @db.Float
+  spellid_1                 Int    @default(0)
+  spelltrigger_1            Int    @default(0) @db.UnsignedTinyInt
+  spellcharges_1            Int    @default(0) @db.SmallInt
+  spellppmRate_1            Float  @default(0) @db.Float
+  spellcooldown_1           Int    @default(-1)
+  spellcategory_1           Int    @default(0) @db.UnsignedSmallInt
+  spellcategorycooldown_1   Int    @default(-1)
+  spellid_2                 Int    @default(0)
+  spelltrigger_2            Int    @default(0) @db.UnsignedTinyInt
+  spellcharges_2            Int    @default(0) @db.SmallInt
+  spellppmRate_2            Float  @default(0) @db.Float
+  spellcooldown_2           Int    @default(-1)
+  spellcategory_2           Int    @default(0) @db.UnsignedSmallInt
+  spellcategorycooldown_2   Int    @default(-1)
+  spellid_3                 Int    @default(0)
+  spelltrigger_3            Int    @default(0) @db.UnsignedTinyInt
+  spellcharges_3            Int    @default(0) @db.SmallInt
+  spellppmRate_3            Float  @default(0) @db.Float
+  spellcooldown_3           Int    @default(-1)
+  spellcategory_3           Int    @default(0) @db.UnsignedSmallInt
+  spellcategorycooldown_3   Int    @default(-1)
+  spellid_4                 Int    @default(0)
+  spelltrigger_4            Int    @default(0) @db.UnsignedTinyInt
+  spellcharges_4            Int    @default(0) @db.SmallInt
+  spellppmRate_4            Float  @default(0) @db.Float
+  spellcooldown_4           Int    @default(-1)
+  spellcategory_4           Int    @default(0) @db.UnsignedSmallInt
+  spellcategorycooldown_4   Int    @default(-1)
+  spellid_5                 Int    @default(0)
+  spelltrigger_5            Int    @default(0) @db.UnsignedTinyInt
+  spellcharges_5            Int    @default(0) @db.SmallInt
+  spellppmRate_5            Float  @default(0) @db.Float
+  spellcooldown_5           Int    @default(-1)
+  spellcategory_5           Int    @default(0) @db.UnsignedSmallInt
+  spellcategorycooldown_5   Int    @default(-1)
+  bonding                   Int    @default(0) @db.UnsignedTinyInt
+  description               String @default("") @db.VarChar(255)
+  PageText                  Int    @default(0) @db.UnsignedInt
+  LanguageID                Int    @default(0) @db.UnsignedTinyInt
+  PageMaterial              Int    @default(0) @db.UnsignedTinyInt
+  startquest                Int    @default(0) @db.UnsignedInt
+  lockid                    Int    @default(0) @db.UnsignedInt
+  Material                  Int    @default(0) @db.TinyInt
+  sheath                    Int    @default(0) @db.UnsignedTinyInt
+  RandomProperty            Int    @default(0)
+  RandomSuffix              Int    @default(0) @db.UnsignedInt
+  block                     Int    @default(0) @db.UnsignedInt
+  itemset                   Int    @default(0) @db.UnsignedInt
+  MaxDurability             Int    @default(0) @db.UnsignedSmallInt
+  area                      Int    @default(0) @db.UnsignedInt
+  Map                       Int    @default(0) @db.SmallInt
+  BagFamily                 Int    @default(0)
+  TotemCategory             Int    @default(0)
+  socketColor_1             Int    @default(0) @db.TinyInt
+  socketContent_1           Int    @default(0)
+  socketColor_2             Int    @default(0) @db.TinyInt
+  socketContent_2           Int    @default(0)
+  socketColor_3             Int    @default(0) @db.TinyInt
+  socketContent_3           Int    @default(0)
+  socketBonus               Int    @default(0)
+  GemProperties             Int    @default(0)
+  RequiredDisenchantSkill   Int    @default(-1) @db.SmallInt
+  ArmorDamageModifier       Float  @default(0) @db.Float
+  duration                  Int    @default(0) @db.UnsignedInt
+  ItemLimitCategory         Int    @default(0) @db.SmallInt
+  HolidayId                 Int    @default(0) @db.UnsignedInt
+  ScriptName                String @default("") @db.VarChar(64)
+  DisenchantID              Int    @default(0) @db.UnsignedInt
+  FoodType                  Int    @default(0) @db.UnsignedTinyInt
+  minMoneyLoot              Int    @default(0) @db.UnsignedInt
+  maxMoneyLoot              Int    @default(0) @db.UnsignedInt
+  flagsCustom               Int    @default(0) @db.UnsignedInt
+  VerifiedBuild             Int?
+
+  @@index([name(length: 250)], map: "idx_name")
+  @@index([class], map: "items_index")
+}
+
+model item_template_locale {
+  ID            Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  Name          String? @db.MediumText
+  Description   String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([ID, locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model lfg_dungeon_rewards {
+  dungeonId    Int @default(0) @db.UnsignedInt
+  maxLevel     Int @default(0) @db.UnsignedTinyInt
+  firstQuestId Int @default(0) @db.UnsignedInt
+  otherQuestId Int @default(0) @db.UnsignedInt
+
+  @@id([dungeonId, maxLevel])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model lfg_dungeon_template {
+  dungeonId     Int     @id @default(0) @db.UnsignedInt
+  name          String? @db.VarChar(255)
+  position_x    Float   @default(0) @db.Float
+  position_y    Float   @default(0) @db.Float
+  position_z    Float   @default(0) @db.Float
+  orientation   Float   @default(0) @db.Float
+  VerifiedBuild Int?
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model linked_respawn {
+  guid       Int @db.UnsignedInt
+  linkedGuid Int @db.UnsignedInt
+  linkType   Int @default(0) @db.UnsignedTinyInt
+
+  @@id([guid, linkType])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mail_level_reward {
+  level          Int @default(0) @db.UnsignedTinyInt
+  raceMask       Int @default(0) @db.UnsignedInt
+  mailTemplateId Int @default(0) @db.UnsignedInt
+  senderEntry    Int @default(0) @db.UnsignedInt
+
+  @@id([level, raceMask])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model mail_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model milling_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model npc_spellclick_spells {
+  npc_entry  Int @db.UnsignedInt
+  spell_id   Int @db.UnsignedInt
+  cast_flags Int @db.UnsignedTinyInt
+  user_type  Int @default(0) @db.UnsignedSmallInt
+
+  @@id([npc_entry, spell_id])
+}
+
+model npc_text {
+  ID               Int     @id @default(0) @db.UnsignedInt
+  text0_0          String? @db.LongText
+  text0_1          String? @db.LongText
+  BroadcastTextID0 Int     @default(0)
+  lang0            Int     @default(0) @db.UnsignedTinyInt
+  Probability0     Float   @default(0) @db.Float
+  EmoteDelay0_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote0_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay0_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote0_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay0_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote0_2         Int     @default(0) @db.UnsignedSmallInt
+  text1_0          String? @db.LongText
+  text1_1          String? @db.LongText
+  BroadcastTextID1 Int     @default(0)
+  lang1            Int     @default(0) @db.UnsignedTinyInt
+  Probability1     Float   @default(0) @db.Float
+  EmoteDelay1_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote1_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay1_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote1_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay1_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote1_2         Int     @default(0) @db.UnsignedSmallInt
+  text2_0          String? @db.LongText
+  text2_1          String? @db.LongText
+  BroadcastTextID2 Int     @default(0)
+  lang2            Int     @default(0) @db.UnsignedTinyInt
+  Probability2     Float   @default(0) @db.Float
+  EmoteDelay2_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote2_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay2_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote2_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay2_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote2_2         Int     @default(0) @db.UnsignedSmallInt
+  text3_0          String? @db.LongText
+  text3_1          String? @db.LongText
+  BroadcastTextID3 Int     @default(0)
+  lang3            Int     @default(0) @db.UnsignedTinyInt
+  Probability3     Float   @default(0) @db.Float
+  EmoteDelay3_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote3_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay3_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote3_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay3_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote3_2         Int     @default(0) @db.UnsignedSmallInt
+  text4_0          String? @db.LongText
+  text4_1          String? @db.LongText
+  BroadcastTextID4 Int     @default(0)
+  lang4            Int     @default(0) @db.UnsignedTinyInt
+  Probability4     Float   @default(0) @db.Float
+  EmoteDelay4_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote4_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay4_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote4_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay4_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote4_2         Int     @default(0) @db.UnsignedSmallInt
+  text5_0          String? @db.LongText
+  text5_1          String? @db.LongText
+  BroadcastTextID5 Int     @default(0)
+  lang5            Int     @default(0) @db.UnsignedTinyInt
+  Probability5     Float   @default(0) @db.Float
+  EmoteDelay5_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote5_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay5_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote5_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay5_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote5_2         Int     @default(0) @db.UnsignedSmallInt
+  text6_0          String? @db.LongText
+  text6_1          String? @db.LongText
+  BroadcastTextID6 Int     @default(0)
+  lang6            Int     @default(0) @db.UnsignedTinyInt
+  Probability6     Float   @default(0) @db.Float
+  EmoteDelay6_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote6_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay6_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote6_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay6_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote6_2         Int     @default(0) @db.UnsignedSmallInt
+  text7_0          String? @db.LongText
+  text7_1          String? @db.LongText
+  BroadcastTextID7 Int     @default(0)
+  lang7            Int     @default(0) @db.UnsignedTinyInt
+  Probability7     Float   @default(0) @db.Float
+  EmoteDelay7_0    Int     @default(0) @db.UnsignedSmallInt
+  Emote7_0         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay7_1    Int     @default(0) @db.UnsignedSmallInt
+  Emote7_1         Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay7_2    Int     @default(0) @db.UnsignedSmallInt
+  Emote7_2         Int     @default(0) @db.UnsignedSmallInt
+  VerifiedBuild    Int?
+}
+
+model npc_text_locale {
+  ID      Int     @default(0) @db.UnsignedInt
+  Locale  String  @db.VarChar(4)
+  Text0_0 String? @db.LongText
+  Text0_1 String? @db.LongText
+  Text1_0 String? @db.LongText
+  Text1_1 String? @db.LongText
+  Text2_0 String? @db.LongText
+  Text2_1 String? @db.LongText
+  Text3_0 String? @db.LongText
+  Text3_1 String? @db.LongText
+  Text4_0 String? @db.LongText
+  Text4_1 String? @db.LongText
+  Text5_0 String? @db.LongText
+  Text5_1 String? @db.LongText
+  Text6_0 String? @db.LongText
+  Text6_1 String? @db.LongText
+  Text7_0 String? @db.LongText
+  Text7_1 String? @db.LongText
+
+  @@id([ID, Locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model npc_vendor {
+  entry         Int  @default(0) @db.UnsignedInt
+  slot          Int  @default(0) @db.SmallInt
+  item          Int  @default(0)
+  maxcount      Int  @default(0) @db.UnsignedTinyInt
+  incrtime      Int  @default(0) @db.UnsignedInt
+  ExtendedCost  Int  @default(0) @db.UnsignedInt
+  VerifiedBuild Int?
+  raceMask      Int  @default(0) @db.UnsignedInt
+  classMask     Int  @default(0) @db.UnsignedInt
+
+  @@id([entry, item, ExtendedCost])
+  @@index([slot], map: "slot")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model outdoorpvp_template {
+  TypeId     Int     @id @db.UnsignedTinyInt
+  ScriptName String  @default("") @db.Char(64)
+  comment    String? @db.MediumText
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model page_text {
+  ID            Int    @id @default(0) @db.UnsignedInt
+  Text          String @db.LongText
+  NextPageID    Int    @default(0) @db.UnsignedInt
+  VerifiedBuild Int    @default(0)
+}
+
+model page_text_locale {
+  ID            Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  Text          String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([ID, locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pet_levelstats {
+  creature_entry Int @db.UnsignedInt
+  level          Int @db.UnsignedTinyInt
+  hp             Int @db.UnsignedSmallInt
+  mana           Int @db.UnsignedSmallInt
+  armor          Int @default(0) @db.UnsignedInt
+  str            Int @db.UnsignedSmallInt
+  agi            Int @db.UnsignedSmallInt
+  sta            Int @db.UnsignedSmallInt
+  inte           Int @db.UnsignedSmallInt
+  spi            Int @db.UnsignedSmallInt
+  min_dmg        Int @default(0) @db.UnsignedSmallInt
+  max_dmg        Int @default(0) @db.UnsignedSmallInt
+
+  @@id([creature_entry, level])
+}
+
+model pet_name_generation {
+  id    Int    @id @db.UnsignedInt
+  word  String @db.Text
+  entry Int    @default(0) @db.UnsignedInt
+  half  Int    @default(0) @db.UnsignedTinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pickpocketing_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+model player_class_roles {
+  class  Int     @id @db.UnsignedMediumInt
+  tank   Boolean
+  healer Boolean
+  damage Boolean
+  leader Boolean
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model player_classlevelstats {
+  class    Int @db.UnsignedTinyInt
+  level    Int @db.UnsignedTinyInt
+  basehp   Int @db.UnsignedSmallInt
+  basemana Int @db.UnsignedSmallInt
+
+  @@id([class, level])
+}
+
+model player_factionchange_achievement {
+  alliance_id Int @db.UnsignedInt
+  horde_id    Int @db.UnsignedInt
+
+  @@id([alliance_id, horde_id])
+}
+
+model player_factionchange_items {
+  race_A      Int     @db.UnsignedInt
+  alliance_id Int     @db.UnsignedInt
+  commentA    String? @db.MediumText
+  race_H      Int     @db.UnsignedInt
+  horde_id    Int     @db.UnsignedInt
+  commentH    String? @db.MediumText
+
+  @@id([alliance_id, horde_id])
+}
+
+model player_factionchange_quests {
+  alliance_id Int @unique(map: "alliance_uniq") @db.UnsignedInt
+  horde_id    Int @unique(map: "horde_uniq") @db.UnsignedInt
+
+  @@id([alliance_id, horde_id])
+}
+
+model player_factionchange_reputations {
+  alliance_id Int @db.UnsignedInt
+  horde_id    Int @db.UnsignedInt
+
+  @@id([alliance_id, horde_id])
+}
+
+model player_factionchange_spells {
+  alliance_id Int @db.UnsignedInt
+  horde_id    Int @db.UnsignedInt
+
+  @@id([alliance_id, horde_id])
+}
+
+model player_factionchange_titles {
+  alliance_id Int
+  horde_id    Int
+
+  @@id([alliance_id, horde_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model player_levelstats {
+  race  Int @db.UnsignedTinyInt
+  class Int @db.UnsignedTinyInt
+  level Int @db.UnsignedTinyInt
+  str   Int @db.UnsignedTinyInt
+  agi   Int @db.UnsignedTinyInt
+  sta   Int @db.UnsignedTinyInt
+  inte  Int @db.UnsignedTinyInt
+  spi   Int @db.UnsignedTinyInt
+
+  @@id([race, class, level])
+}
+
+model player_totem_model {
+  TotemSlot Int @db.UnsignedTinyInt
+  RaceId    Int @db.UnsignedTinyInt
+  DisplayId Int @default(0) @db.UnsignedInt
+
+  @@id([TotemSlot, RaceId])
+}
+
+model player_xp_for_level {
+  Level      Int @id @db.UnsignedTinyInt
+  Experience Int @db.UnsignedInt
+}
+
+model playercreateinfo {
+  race        Int   @default(0) @db.UnsignedTinyInt
+  class       Int   @default(0) @db.UnsignedTinyInt
+  map         Int   @default(0) @db.UnsignedSmallInt
+  zone        Int   @default(0) @db.UnsignedInt
+  position_x  Float @default(0) @db.Float
+  position_y  Float @default(0) @db.Float
+  position_z  Float @default(0) @db.Float
+  orientation Float @default(0) @db.Float
+
+  @@id([race, class])
+}
+
+model playercreateinfo_action {
+  race   Int @default(0) @db.UnsignedTinyInt
+  class  Int @default(0) @db.UnsignedTinyInt
+  button Int @default(0) @db.UnsignedSmallInt
+  action Int @default(0) @db.UnsignedInt
+  type   Int @default(0) @db.UnsignedSmallInt
+
+  @@id([race, class, button])
+  @@index([race, class], map: "playercreateinfo_race_class_index")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model playercreateinfo_cast_spell {
+  raceMask  Int     @default(0) @db.UnsignedInt
+  classMask Int     @default(0) @db.UnsignedInt
+  spell     Int     @default(0) @db.UnsignedInt
+  note      String? @db.VarChar(255)
+
+  @@ignore
+}
+
+model playercreateinfo_item {
+  race   Int @default(0) @db.UnsignedTinyInt
+  class  Int @default(0) @db.UnsignedTinyInt
+  itemid Int @default(0) @db.UnsignedInt
+  amount Int @default(1) @db.TinyInt
+
+  @@id([race, class, itemid])
+  @@index([race, class], map: "playercreateinfo_race_class_index")
+}
+
+model playercreateinfo_skills {
+  raceMask  Int     @db.UnsignedInt
+  classMask Int     @db.UnsignedInt
+  skill     Int     @db.UnsignedSmallInt
+  rank      Int     @default(0) @db.UnsignedSmallInt
+  comment   String? @db.VarChar(255)
+
+  @@id([raceMask, classMask, skill])
+}
+
+model playercreateinfo_spell_custom {
+  racemask  Int     @default(0) @db.UnsignedInt
+  classmask Int     @default(0) @db.UnsignedInt
+  Spell     Int     @default(0) @db.UnsignedInt
+  Note      String? @db.VarChar(255)
+
+  @@id([racemask, classmask, Spell])
+}
+
+model points_of_interest {
+  ID            Int    @id @default(0) @db.UnsignedInt
+  PositionX     Float  @default(0) @db.Float
+  PositionY     Float  @default(0) @db.Float
+  Icon          Int    @default(0) @db.UnsignedInt
+  Flags         Int    @default(0) @db.UnsignedInt
+  Importance    Int    @default(0) @db.UnsignedInt
+  Name          String @db.MediumText
+  VerifiedBuild Int?
+}
+
+model points_of_interest_locale {
+  ID            Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  Name          String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([ID, locale])
+}
+
+model pool_members {
+  type        Int     @db.UnsignedSmallInt
+  spawnId     Int     @db.UnsignedInt
+  poolSpawnId Int     @db.UnsignedInt
+  chance      Float   @db.Float
+  description String? @db.VarChar(255)
+
+  @@id([type, spawnId])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pool_template {
+  entry       Int     @id @default(0) @db.UnsignedInt
+  max_limit   Int     @default(0) @db.UnsignedInt
+  description String? @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model prospecting_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+model quest_details {
+  ID            Int @id @default(0) @db.UnsignedInt
+  Emote1        Int @default(0) @db.UnsignedSmallInt
+  Emote2        Int @default(0) @db.UnsignedSmallInt
+  Emote3        Int @default(0) @db.UnsignedSmallInt
+  Emote4        Int @default(0) @db.UnsignedSmallInt
+  EmoteDelay1   Int @default(0) @db.UnsignedInt
+  EmoteDelay2   Int @default(0) @db.UnsignedInt
+  EmoteDelay3   Int @default(0) @db.UnsignedInt
+  EmoteDelay4   Int @default(0) @db.UnsignedInt
+  VerifiedBuild Int @default(0)
+}
+
+model quest_greeting {
+  ID              Int     @default(0) @db.UnsignedInt
+  Type            Int     @default(0) @db.UnsignedTinyInt
+  GreetEmoteType  Int     @default(0) @db.UnsignedSmallInt
+  GreetEmoteDelay Int     @default(0) @db.UnsignedInt
+  Greeting        String? @db.MediumText
+  VerifiedBuild   Int?
+
+  @@id([ID, Type])
+}
+
+model quest_greeting_locale {
+  ID            Int     @default(0) @db.UnsignedInt
+  Type          Int     @default(0) @db.UnsignedTinyInt
+  locale        String  @db.VarChar(4)
+  Greeting      String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([ID, Type, locale])
+}
+
+model quest_mail_sender {
+  QuestId               Int @id @default(0) @db.UnsignedInt
+  RewardMailSenderEntry Int @default(0) @db.UnsignedInt
+}
+
+model quest_offer_reward {
+  ID            Int     @id @default(0) @db.UnsignedInt
+  Emote1        Int     @default(0) @db.UnsignedSmallInt
+  Emote2        Int     @default(0) @db.UnsignedSmallInt
+  Emote3        Int     @default(0) @db.UnsignedSmallInt
+  Emote4        Int     @default(0) @db.UnsignedSmallInt
+  EmoteDelay1   Int     @default(0) @db.UnsignedInt
+  EmoteDelay2   Int     @default(0) @db.UnsignedInt
+  EmoteDelay3   Int     @default(0) @db.UnsignedInt
+  EmoteDelay4   Int     @default(0) @db.UnsignedInt
+  RewardText    String? @db.MediumText
+  VerifiedBuild Int     @default(0)
+}
+
+model quest_offer_reward_locale {
+  ID            Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  RewardText    String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([ID, locale])
+}
+
+model quest_poi {
+  QuestID        Int  @default(0) @db.UnsignedInt
+  id             Int  @default(0) @db.UnsignedInt
+  ObjectiveIndex Int  @default(0)
+  MapID          Int  @default(0) @db.UnsignedInt
+  WorldMapAreaId Int  @default(0) @db.UnsignedInt
+  Floor          Int  @default(0) @db.UnsignedInt
+  Priority       Int  @default(0) @db.UnsignedInt
+  Flags          Int  @default(0) @db.UnsignedInt
+  VerifiedBuild  Int?
+
+  @@id([QuestID, id])
+  @@index([QuestID, id], map: "idx")
+}
+
+model quest_poi_points {
+  QuestID       Int  @default(0) @db.UnsignedInt
+  Idx1          Int  @default(0) @db.UnsignedInt
+  Idx2          Int  @default(0) @db.UnsignedInt
+  X             Int  @default(0)
+  Y             Int  @default(0)
+  VerifiedBuild Int?
+
+  @@id([QuestID, Idx1, Idx2])
+  @@index([QuestID, Idx1], map: "questId_id")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model quest_pool_members {
+  questId     Int     @id @db.UnsignedInt
+  poolId      Int     @db.UnsignedInt
+  poolIndex   Int     @db.UnsignedTinyInt
+  description String? @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model quest_pool_template {
+  poolId      Int     @id @db.UnsignedInt
+  numActive   Int     @db.UnsignedInt
+  description String? @db.VarChar(255)
+}
+
+model quest_request_items {
+  ID                Int     @id @default(0) @db.UnsignedInt
+  EmoteOnComplete   Int     @default(0) @db.UnsignedSmallInt
+  EmoteOnIncomplete Int     @default(0) @db.UnsignedSmallInt
+  CompletionText    String? @db.MediumText
+  VerifiedBuild     Int     @default(0)
+}
+
+model quest_request_items_locale {
+  ID             Int     @default(0) @db.UnsignedInt
+  locale         String  @db.VarChar(4)
+  CompletionText String? @db.MediumText
+  VerifiedBuild  Int?
+
+  @@id([ID, locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model quest_template {
+  ID                        Int     @id @default(0) @db.UnsignedInt
+  QuestType                 Int     @default(2) @db.UnsignedTinyInt
+  QuestLevel                Int     @default(1) @db.SmallInt
+  MinLevel                  Int     @default(0) @db.UnsignedTinyInt
+  QuestSortID               Int     @default(0) @db.SmallInt
+  QuestInfoID               Int     @default(0) @db.UnsignedSmallInt
+  SuggestedGroupNum         Int     @default(0) @db.UnsignedTinyInt
+  RequiredFactionId1        Int     @default(0) @db.UnsignedSmallInt
+  RequiredFactionId2        Int     @default(0) @db.UnsignedSmallInt
+  RequiredFactionValue1     Int     @default(0)
+  RequiredFactionValue2     Int     @default(0)
+  RewardNextQuest           Int     @default(0) @db.UnsignedInt
+  RewardXPDifficulty        Int     @default(0) @db.UnsignedTinyInt
+  RewardMoney               Int     @default(0)
+  RewardBonusMoney          Int     @default(0) @db.UnsignedInt
+  RewardDisplaySpell        Int     @default(0) @db.UnsignedInt
+  RewardSpell               Int     @default(0)
+  RewardHonor               Int     @default(0)
+  RewardKillHonor           Float   @default(0) @db.Float
+  StartItem                 Int     @default(0) @db.UnsignedInt
+  Flags                     Int     @default(0) @db.UnsignedInt
+  RequiredPlayerKills       Int     @default(0) @db.UnsignedTinyInt
+  RewardItem1               Int     @default(0) @db.UnsignedInt
+  RewardAmount1             Int     @default(0) @db.UnsignedSmallInt
+  RewardItem2               Int     @default(0) @db.UnsignedInt
+  RewardAmount2             Int     @default(0) @db.UnsignedSmallInt
+  RewardItem3               Int     @default(0) @db.UnsignedInt
+  RewardAmount3             Int     @default(0) @db.UnsignedSmallInt
+  RewardItem4               Int     @default(0) @db.UnsignedInt
+  RewardAmount4             Int     @default(0) @db.UnsignedSmallInt
+  ItemDrop1                 Int     @default(0) @db.UnsignedInt
+  ItemDropQuantity1         Int     @default(0) @db.UnsignedSmallInt
+  ItemDrop2                 Int     @default(0) @db.UnsignedInt
+  ItemDropQuantity2         Int     @default(0) @db.UnsignedSmallInt
+  ItemDrop3                 Int     @default(0) @db.UnsignedInt
+  ItemDropQuantity3         Int     @default(0) @db.UnsignedSmallInt
+  ItemDrop4                 Int     @default(0) @db.UnsignedInt
+  ItemDropQuantity4         Int     @default(0) @db.UnsignedSmallInt
+  RewardChoiceItemID1       Int     @default(0) @db.UnsignedInt
+  RewardChoiceItemQuantity1 Int     @default(0) @db.UnsignedSmallInt
+  RewardChoiceItemID2       Int     @default(0) @db.UnsignedInt
+  RewardChoiceItemQuantity2 Int     @default(0) @db.UnsignedSmallInt
+  RewardChoiceItemID3       Int     @default(0) @db.UnsignedInt
+  RewardChoiceItemQuantity3 Int     @default(0) @db.UnsignedSmallInt
+  RewardChoiceItemID4       Int     @default(0) @db.UnsignedInt
+  RewardChoiceItemQuantity4 Int     @default(0) @db.UnsignedSmallInt
+  RewardChoiceItemID5       Int     @default(0) @db.UnsignedInt
+  RewardChoiceItemQuantity5 Int     @default(0) @db.UnsignedSmallInt
+  RewardChoiceItemID6       Int     @default(0) @db.UnsignedInt
+  RewardChoiceItemQuantity6 Int     @default(0) @db.UnsignedSmallInt
+  POIContinent              Int     @default(0) @db.UnsignedSmallInt
+  POIx                      Float   @default(0) @db.Float
+  POIy                      Float   @default(0) @db.Float
+  POIPriority               Int     @default(0) @db.UnsignedInt
+  RewardTitle               Int     @default(0) @db.UnsignedTinyInt
+  RewardTalents             Int     @default(0) @db.UnsignedTinyInt
+  RewardTalentsPermanent    Int     @default(0) @db.UnsignedInt
+  RewardArenaPoints         Int     @default(0) @db.UnsignedSmallInt
+  RewardFactionID1          Int     @default(0) @db.UnsignedSmallInt
+  RewardFactionValue1       Int     @default(0)
+  RewardFactionOverride1    Int     @default(0)
+  RewardFactionID2          Int     @default(0) @db.UnsignedSmallInt
+  RewardFactionValue2       Int     @default(0)
+  RewardFactionOverride2    Int     @default(0)
+  RewardFactionID3          Int     @default(0) @db.UnsignedSmallInt
+  RewardFactionValue3       Int     @default(0)
+  RewardFactionOverride3    Int     @default(0)
+  RewardFactionID4          Int     @default(0) @db.UnsignedSmallInt
+  RewardFactionValue4       Int     @default(0)
+  RewardFactionOverride4    Int     @default(0)
+  RewardFactionID5          Int     @default(0) @db.UnsignedSmallInt
+  RewardFactionValue5       Int     @default(0)
+  RewardFactionOverride5    Int     @default(0)
+  TimeAllowed               Int     @default(0) @db.UnsignedInt
+  AllowableRaces            Int     @default(0) @db.UnsignedSmallInt
+  LogTitle                  String? @db.MediumText
+  LogDescription            String? @db.MediumText
+  QuestDescription          String? @db.MediumText
+  AreaDescription           String? @db.MediumText
+  QuestCompletionLog        String? @db.MediumText
+  RequiredNpcOrGo1          Int     @default(0)
+  RequiredNpcOrGo2          Int     @default(0)
+  RequiredNpcOrGo3          Int     @default(0)
+  RequiredNpcOrGo4          Int     @default(0)
+  RequiredNpcOrGoCount1     Int     @default(0) @db.UnsignedSmallInt
+  RequiredNpcOrGoCount2     Int     @default(0) @db.UnsignedSmallInt
+  RequiredNpcOrGoCount3     Int     @default(0) @db.UnsignedSmallInt
+  RequiredNpcOrGoCount4     Int     @default(0) @db.UnsignedSmallInt
+  RequiredItemId1           Int     @default(0) @db.UnsignedInt
+  RequiredItemId2           Int     @default(0) @db.UnsignedInt
+  RequiredItemId3           Int     @default(0) @db.UnsignedInt
+  RequiredItemId4           Int     @default(0) @db.UnsignedInt
+  RequiredItemId5           Int     @default(0) @db.UnsignedInt
+  RequiredItemId6           Int     @default(0) @db.UnsignedInt
+  RequiredItemCount1        Int     @default(0) @db.UnsignedSmallInt
+  RequiredItemCount2        Int     @default(0) @db.UnsignedSmallInt
+  RequiredItemCount3        Int     @default(0) @db.UnsignedSmallInt
+  RequiredItemCount4        Int     @default(0) @db.UnsignedSmallInt
+  RequiredItemCount5        Int     @default(0) @db.UnsignedSmallInt
+  RequiredItemCount6        Int     @default(0) @db.UnsignedSmallInt
+  Unknown0                  Int     @default(0) @db.UnsignedTinyInt
+  ObjectiveText1            String? @db.MediumText
+  ObjectiveText2            String? @db.MediumText
+  ObjectiveText3            String? @db.MediumText
+  ObjectiveText4            String? @db.MediumText
+  VerifiedBuild             Int?
+}
+
+model quest_template_addon {
+  ID                    Int @id @default(0) @db.UnsignedInt
+  MaxLevel              Int @default(0) @db.UnsignedTinyInt
+  AllowableClasses      Int @default(0) @db.UnsignedInt
+  SourceSpellID         Int @default(0) @db.UnsignedInt
+  PrevQuestID           Int @default(0)
+  NextQuestID           Int @default(0) @db.UnsignedInt
+  ExclusiveGroup        Int @default(0)
+  BreadcrumbForQuestId  Int @default(0)
+  RewardMailTemplateID  Int @default(0) @db.UnsignedInt
+  RewardMailDelay       Int @default(0) @db.UnsignedInt
+  RequiredSkillID       Int @default(0) @db.UnsignedSmallInt
+  RequiredSkillPoints   Int @default(0) @db.UnsignedSmallInt
+  RequiredMinRepFaction Int @default(0) @db.UnsignedSmallInt
+  RequiredMaxRepFaction Int @default(0) @db.UnsignedSmallInt
+  RequiredMinRepValue   Int @default(0)
+  RequiredMaxRepValue   Int @default(0)
+  ProvidedItemCount     Int @default(0) @db.UnsignedTinyInt
+  SpecialFlags          Int @default(0) @db.UnsignedTinyInt
+}
+
+model quest_template_locale {
+  ID             Int     @default(0) @db.UnsignedInt
+  locale         String  @db.VarChar(4)
+  Title          String? @db.MediumText
+  Details        String? @db.MediumText
+  Objectives     String? @db.MediumText
+  EndText        String? @db.MediumText
+  CompletedText  String? @db.MediumText
+  ObjectiveText1 String? @db.MediumText
+  ObjectiveText2 String? @db.MediumText
+  ObjectiveText3 String? @db.MediumText
+  ObjectiveText4 String? @db.MediumText
+  VerifiedBuild  Int?
+
+  @@id([ID, locale])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model reference_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+model reputation_reward_rate {
+  faction               Int   @id @default(0) @db.UnsignedInt
+  quest_rate            Float @default(1) @db.Float
+  quest_daily_rate      Float @default(1) @db.Float
+  quest_weekly_rate     Float @default(1) @db.Float
+  quest_monthly_rate    Float @default(1) @db.Float
+  quest_repeatable_rate Float @default(1) @db.Float
+  creature_rate         Float @default(1) @db.Float
+  spell_rate            Float @default(1) @db.Float
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model reputation_spillover_template {
+  faction  Int   @id @default(0) @db.UnsignedSmallInt
+  faction1 Int   @default(0) @db.UnsignedSmallInt
+  rate_1   Float @default(0) @db.Float
+  rank_1   Int   @default(0) @db.UnsignedTinyInt
+  faction2 Int   @default(0) @db.UnsignedSmallInt
+  rate_2   Float @default(0) @db.Float
+  rank_2   Int   @default(0) @db.UnsignedTinyInt
+  faction3 Int   @default(0) @db.UnsignedSmallInt
+  rate_3   Float @default(0) @db.Float
+  rank_3   Int   @default(0) @db.UnsignedTinyInt
+  faction4 Int   @default(0) @db.UnsignedSmallInt
+  rate_4   Float @default(0) @db.Float
+  rank_4   Int   @default(0) @db.UnsignedTinyInt
+}
+
+model script_spline_chain_meta {
+  entry            Int    @db.UnsignedInt
+  chainId          Int    @db.UnsignedSmallInt
+  splineId         Int    @db.UnsignedTinyInt
+  expectedDuration Int    @db.UnsignedInt
+  msUntilNext      Int    @db.UnsignedInt
+  velocity         Float? @default(0) @db.Float
+
+  @@id([entry, chainId, splineId])
+}
+
+model script_spline_chain_waypoints {
+  entry    Int   @db.UnsignedInt
+  chainId  Int   @db.UnsignedSmallInt
+  splineId Int   @db.UnsignedTinyInt
+  wpId     Int   @db.UnsignedTinyInt
+  x        Float @db.Float
+  y        Float @db.Float
+  z        Float @db.Float
+
+  @@id([entry, chainId, splineId, wpId])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model script_waypoint {
+  entry         Int     @default(0) @db.UnsignedInt
+  pointid       Int     @default(0) @db.UnsignedInt
+  location_x    Float   @default(0) @db.Float
+  location_y    Float   @default(0) @db.Float
+  location_z    Float   @default(0) @db.Float
+  waittime      Int     @default(0) @db.UnsignedInt
+  point_comment String? @db.MediumText
+
+  @@id([entry, pointid])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model skill_discovery_template {
+  spellId       Int   @default(0) @db.UnsignedInt
+  reqSpell      Int   @default(0) @db.UnsignedInt
+  reqSkillValue Int   @default(0) @db.UnsignedSmallInt
+  chance        Float @default(0) @db.Float
+
+  @@id([spellId, reqSpell])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model skill_extra_item_template {
+  spellId                Int   @id @default(0) @db.UnsignedInt
+  requiredSpecialization Int   @default(0) @db.UnsignedInt
+  additionalCreateChance Float @default(0) @db.Float
+  additionalMaxNum       Int   @default(0) @db.UnsignedTinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model skill_fishing_base_level {
+  entry Int @id @default(0) @db.UnsignedInt
+  skill Int @default(0) @db.SmallInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model skill_perfect_item_template {
+  spellId                Int   @id @default(0) @db.UnsignedInt
+  requiredSpecialization Int   @default(0) @db.UnsignedInt
+  perfectCreateChance    Float @default(0) @db.Float
+  perfectItemType        Int   @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model skinning_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model smart_scripts {
+  entryorguid      Int
+  source_type      Int    @default(0) @db.UnsignedTinyInt
+  id               Int    @default(0) @db.UnsignedSmallInt
+  link             Int    @default(0) @db.UnsignedSmallInt
+  event_type       Int?   @db.UnsignedInt
+  event_phase_mask Int    @default(0) @db.UnsignedSmallInt
+  event_chance     Int    @default(100) @db.UnsignedTinyInt
+  event_flags      Int    @default(0) @db.UnsignedSmallInt
+  event_param1     Int    @default(0) @db.UnsignedInt
+  event_param2     Int    @default(0) @db.UnsignedInt
+  event_param3     Int    @default(0) @db.UnsignedInt
+  event_param4     Int    @default(0) @db.UnsignedInt
+  event_param5     Int    @default(0) @db.UnsignedInt
+  action_type      Int?   @db.UnsignedInt
+  action_param1    Int    @default(0) @db.UnsignedInt
+  action_param2    Int    @default(0) @db.UnsignedInt
+  action_param3    Int    @default(0) @db.UnsignedInt
+  action_param4    Int    @default(0) @db.UnsignedInt
+  action_param5    Int    @default(0) @db.UnsignedInt
+  action_param6    Int    @default(0) @db.UnsignedInt
+  target_type      Int    @default(0) @db.UnsignedTinyInt
+  target_param1    Int    @default(0) @db.UnsignedInt
+  target_param2    Int    @default(0) @db.UnsignedInt
+  target_param3    Int    @default(0) @db.UnsignedInt
+  target_param4    Int    @default(0) @db.UnsignedInt
+  target_x         Float  @default(0) @db.Float
+  target_y         Float  @default(0) @db.Float
+  target_z         Float  @default(0) @db.Float
+  target_o         Float  @default(0) @db.Float
+  comment          String @db.MediumText
+
+  @@id([entryorguid, source_type, id, link])
+}
+
+model spawn_group {
+  groupId   Int @db.UnsignedInt
+  spawnType Int @db.UnsignedTinyInt
+  spawnId   Int @db.UnsignedInt
+
+  @@id([groupId, spawnType, spawnId])
+}
+
+model spawn_group_template {
+  groupId    Int    @id @db.UnsignedInt
+  groupName  String @db.VarChar(100)
+  groupFlags Int    @default(0) @db.UnsignedInt
+}
+
+model spell_area {
+  spell              Int @default(0) @db.UnsignedInt
+  area               Int @default(0) @db.UnsignedInt
+  quest_start        Int @default(0) @db.UnsignedInt
+  quest_end          Int @default(0) @db.UnsignedInt
+  aura_spell         Int @default(0)
+  racemask           Int @default(0) @db.UnsignedInt
+  gender             Int @default(2) @db.UnsignedTinyInt
+  autocast           Int @default(0) @db.UnsignedTinyInt
+  quest_start_status Int @default(64)
+  quest_end_status   Int @default(11)
+
+  @@id([spell, area, quest_start, aura_spell, racemask, gender])
+}
+
+model spell_autolearn {
+  spell     Int @db.UnsignedInt
+  racemask  Int @default(0) @db.UnsignedInt
+  classmask Int @default(0) @db.UnsignedInt
+  level     Int @default(0) @db.UnsignedInt
+
+  @@id([spell, racemask, classmask])
+}
+
+model spell_bonus_data {
+  entry        Int     @id @default(0) @db.UnsignedInt
+  direct_bonus Float   @default(0) @db.Float
+  dot_bonus    Float   @default(0) @db.Float
+  ap_bonus     Float   @default(0) @db.Float
+  ap_dot_bonus Float   @default(0) @db.Float
+  comments     String? @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_custom_attr {
+  entry      Int @id @default(0) @db.UnsignedInt
+  attributes Int @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_dbc {
+  Id                            Int     @id @db.UnsignedInt
+  Dispel                        Int     @default(0) @db.UnsignedInt
+  Mechanic                      Int     @default(0) @db.UnsignedInt
+  Attributes                    Int     @default(0) @db.UnsignedInt
+  AttributesEx                  Int     @default(0) @db.UnsignedInt
+  AttributesEx2                 Int     @default(0) @db.UnsignedInt
+  AttributesEx3                 Int     @default(0) @db.UnsignedInt
+  AttributesEx4                 Int     @default(0) @db.UnsignedInt
+  AttributesEx5                 Int     @default(0) @db.UnsignedInt
+  AttributesEx6                 Int     @default(0) @db.UnsignedInt
+  AttributesEx7                 Int     @default(0) @db.UnsignedInt
+  Stances                       Int     @default(0) @db.UnsignedInt
+  StancesNot                    Int     @default(0) @db.UnsignedInt
+  Targets                       Int     @default(0) @db.UnsignedInt
+  CastingTimeIndex              Int     @default(1) @db.UnsignedInt
+  AuraInterruptFlags            Int     @default(0) @db.UnsignedInt
+  ProcFlags                     Int     @default(0) @db.UnsignedInt
+  ProcChance                    Int     @default(0) @db.UnsignedInt
+  ProcCharges                   Int     @default(0) @db.UnsignedInt
+  MaxLevel                      Int     @default(0) @db.UnsignedInt
+  BaseLevel                     Int     @default(0) @db.UnsignedInt
+  SpellLevel                    Int     @default(0) @db.UnsignedInt
+  DurationIndex                 Int     @default(0) @db.UnsignedInt
+  RangeIndex                    Int     @default(1) @db.UnsignedInt
+  StackAmount                   Int     @default(0) @db.UnsignedInt
+  EquippedItemClass             Int     @default(-1)
+  EquippedItemSubClassMask      Int     @default(0)
+  EquippedItemInventoryTypeMask Int     @default(0)
+  Effect1                       Int     @default(0) @db.UnsignedInt
+  Effect2                       Int     @default(0) @db.UnsignedInt
+  Effect3                       Int     @default(0) @db.UnsignedInt
+  EffectDieSides1               Int     @default(0)
+  EffectDieSides2               Int     @default(0)
+  EffectDieSides3               Int     @default(0)
+  EffectRealPointsPerLevel1     Float   @default(0) @db.Float
+  EffectRealPointsPerLevel2     Float   @default(0) @db.Float
+  EffectRealPointsPerLevel3     Float   @default(0) @db.Float
+  EffectBasePoints1             Int     @default(0)
+  EffectBasePoints2             Int     @default(0)
+  EffectBasePoints3             Int     @default(0)
+  EffectMechanic1               Int     @default(0) @db.UnsignedInt
+  EffectMechanic2               Int     @default(0) @db.UnsignedInt
+  EffectMechanic3               Int     @default(0) @db.UnsignedInt
+  EffectImplicitTargetA1        Int     @default(0) @db.UnsignedInt
+  EffectImplicitTargetA2        Int     @default(0) @db.UnsignedInt
+  EffectImplicitTargetA3        Int     @default(0) @db.UnsignedInt
+  EffectImplicitTargetB1        Int     @default(0) @db.UnsignedInt
+  EffectImplicitTargetB2        Int     @default(0) @db.UnsignedInt
+  EffectImplicitTargetB3        Int     @default(0) @db.UnsignedInt
+  EffectRadiusIndex1            Int     @default(0) @db.UnsignedInt
+  EffectRadiusIndex2            Int     @default(0) @db.UnsignedInt
+  EffectRadiusIndex3            Int     @default(0) @db.UnsignedInt
+  EffectApplyAuraName1          Int     @default(0) @db.UnsignedInt
+  EffectApplyAuraName2          Int     @default(0) @db.UnsignedInt
+  EffectApplyAuraName3          Int     @default(0) @db.UnsignedInt
+  EffectAmplitude1              Int     @default(0)
+  EffectAmplitude2              Int     @default(0)
+  EffectAmplitude3              Int     @default(0)
+  EffectMultipleValue1          Float   @default(0) @db.Float
+  EffectMultipleValue2          Float   @default(0) @db.Float
+  EffectMultipleValue3          Float   @default(0) @db.Float
+  EffectItemType1               Int     @default(0) @db.UnsignedInt
+  EffectItemType2               Int     @default(0) @db.UnsignedInt
+  EffectItemType3               Int     @default(0) @db.UnsignedInt
+  EffectMiscValue1              Int     @default(0)
+  EffectMiscValue2              Int     @default(0)
+  EffectMiscValue3              Int     @default(0)
+  EffectMiscValueB1             Int     @default(0)
+  EffectMiscValueB2             Int     @default(0)
+  EffectMiscValueB3             Int     @default(0)
+  EffectTriggerSpell1           Int     @default(0) @db.UnsignedInt
+  EffectTriggerSpell2           Int     @default(0) @db.UnsignedInt
+  EffectTriggerSpell3           Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskA1        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskA2        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskA3        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskB1        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskB2        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskB3        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskC1        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskC2        Int     @default(0) @db.UnsignedInt
+  EffectSpellClassMaskC3        Int     @default(0) @db.UnsignedInt
+  SpellName                     String? @db.VarChar(100)
+  MaxTargetLevel                Int     @default(0) @db.UnsignedInt
+  SpellFamilyName               Int     @default(0) @db.UnsignedInt
+  SpellFamilyFlags1             Int     @default(0) @db.UnsignedInt
+  SpellFamilyFlags2             Int     @default(0) @db.UnsignedInt
+  SpellFamilyFlags3             Int     @default(0) @db.UnsignedInt
+  MaxAffectedTargets            Int     @default(0) @db.UnsignedInt
+  DmgClass                      Int     @default(0) @db.UnsignedInt
+  PreventionType                Int     @default(0) @db.UnsignedInt
+  DmgMultiplier1                Float   @default(0) @db.Float
+  DmgMultiplier2                Float   @default(0) @db.Float
+  DmgMultiplier3                Float   @default(0) @db.Float
+  AreaGroupId                   Int     @default(0)
+  SchoolMask                    Int     @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_enchant_proc_data {
+  EnchantID      Int   @id @db.UnsignedInt
+  Chance         Float @default(0) @db.Float
+  ProcsPerMinute Float @default(0) @db.Float
+  HitMask        Int   @default(0) @db.UnsignedInt
+  AttributesMask Int   @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_group {
+  id       Int @default(0) @db.UnsignedInt
+  spell_id Int @default(0)
+
+  @@id([id, spell_id])
+}
+
+model spell_group_stack_rules {
+  group_id   Int @id @default(0) @db.UnsignedInt
+  stack_rule Int @default(0) @db.TinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_learn_spell {
+  entry   Int @default(0) @db.UnsignedInt
+  SpellID Int @default(0) @db.UnsignedInt
+  Active  Int @default(1) @db.UnsignedTinyInt
+
+  @@id([entry, SpellID])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_linked_spell {
+  spell_trigger Int
+  spell_effect  Int    @default(0)
+  type          Int    @default(0) @db.UnsignedTinyInt
+  comment       String @db.MediumText
+
+  @@unique([spell_trigger, spell_effect, type], map: "trigger_effect_type")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_loot_template {
+  Entry         Int     @default(0) @db.UnsignedInt
+  Item          Int     @default(0) @db.UnsignedInt
+  Reference     Int     @default(0) @db.UnsignedInt
+  Chance        Float   @default(100) @db.Float
+  QuestRequired Boolean @default(false)
+  LootMode      Int     @default(1) @db.UnsignedSmallInt
+  GroupId       Int     @default(0) @db.UnsignedTinyInt
+  MinCount      Int     @default(1) @db.UnsignedTinyInt
+  MaxCount      Int     @default(1) @db.UnsignedTinyInt
+  Comment       String? @db.VarChar(255)
+
+  @@id([Entry, Item])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_pet_auras {
+  spell    Int @db.UnsignedInt
+  effectId Int @default(0) @db.UnsignedTinyInt
+  pet      Int @default(0) @db.UnsignedInt
+  aura     Int @db.UnsignedInt
+
+  @@id([spell, effectId, pet])
+}
+
+model spell_proc {
+  SpellId            Int   @id @default(0)
+  SchoolMask         Int   @default(0) @db.UnsignedTinyInt
+  SpellFamilyName    Int   @default(0) @db.UnsignedSmallInt
+  SpellFamilyMask0   Int   @default(0) @db.UnsignedInt
+  SpellFamilyMask1   Int   @default(0) @db.UnsignedInt
+  SpellFamilyMask2   Int   @default(0) @db.UnsignedInt
+  ProcFlags          Int   @default(0) @db.UnsignedInt
+  SpellTypeMask      Int   @default(0) @db.UnsignedInt
+  SpellPhaseMask     Int   @default(0) @db.UnsignedInt
+  HitMask            Int   @default(0) @db.UnsignedInt
+  AttributesMask     Int   @default(0) @db.UnsignedInt
+  DisableEffectsMask Int   @default(0) @db.UnsignedInt
+  ProcsPerMinute     Float @default(0) @db.Float
+  Chance             Float @default(0) @db.Float
+  Cooldown           Int   @default(0) @db.UnsignedInt
+  Charges            Int   @default(0) @db.UnsignedTinyInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_ranks {
+  first_spell_id Int @default(0) @db.UnsignedInt
+  spell_id       Int @unique(map: "spell_id") @default(0) @db.UnsignedInt
+  rank           Int @default(0) @db.UnsignedTinyInt
+
+  @@id([first_spell_id, rank])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_required {
+  spell_id  Int @default(0)
+  req_spell Int @default(0)
+
+  @@id([spell_id, req_spell])
+}
+
+model spell_script_names {
+  spell_id   Int
+  ScriptName String @db.Char(64)
+
+  @@unique([spell_id, ScriptName], map: "spell_id")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model spell_scripts {
+  id        Int    @default(0) @db.UnsignedInt
+  effIndex  Int    @default(0) @db.UnsignedTinyInt
+  delay     Int    @default(0) @db.UnsignedInt
+  command   Int    @default(0) @db.UnsignedInt
+  datalong  Int    @default(0) @db.UnsignedInt
+  datalong2 Int    @default(0) @db.UnsignedInt
+  dataint   Int    @default(0)
+  x         Float  @default(0) @db.Float
+  y         Float  @default(0) @db.Float
+  z         Float  @default(0) @db.Float
+  o         Float  @default(0) @db.Float
+  Comment   String @default("") @db.VarChar(255)
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_target_position {
+  ID            Int   @default(0) @db.UnsignedInt
+  EffectIndex   Int   @default(0) @db.UnsignedTinyInt
+  MapID         Int   @default(0) @db.UnsignedSmallInt
+  PositionX     Float @default(0) @db.Float
+  PositionY     Float @default(0) @db.Float
+  PositionZ     Float @default(0) @db.Float
+  Orientation   Float @default(0) @db.Float
+  VerifiedBuild Int?
+
+  @@id([ID, EffectIndex])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model spell_threat {
+  entry    Int   @id @db.UnsignedInt
+  flatMod  Int?
+  pctMod   Float @default(1) @db.Float
+  apPctMod Float @default(0) @db.Float
+}
+
+model spelldifficulty_dbc {
+  id       Int @id @default(0) @db.UnsignedInt
+  spellid0 Int @default(0) @db.UnsignedInt
+  spellid1 Int @default(0) @db.UnsignedInt
+  spellid2 Int @default(0) @db.UnsignedInt
+  spellid3 Int @default(0) @db.UnsignedInt
+}
+
+model trainer {
+  Id            Int     @id @default(0) @db.UnsignedInt
+  Type          Int     @default(2) @db.UnsignedTinyInt
+  Requirement   Int     @default(0) @db.UnsignedInt
+  Greeting      String? @db.MediumText
+  VerifiedBuild Int?
+  raceMask      Int     @default(0) @db.UnsignedInt
+  classMask     Int     @default(0) @db.UnsignedInt
+}
+
+model trainer_locale {
+  Id            Int     @default(0) @db.UnsignedInt
+  locale        String  @db.VarChar(4)
+  Greeting_lang String? @db.MediumText
+  VerifiedBuild Int?
+
+  @@id([Id, locale])
+}
+
+model trainer_spell {
+  TrainerId     Int  @default(0) @db.UnsignedInt
+  SpellId       Int  @default(0) @db.UnsignedInt
+  MoneyCost     Int  @default(0) @db.UnsignedInt
+  ReqSkillLine  Int  @default(0) @db.UnsignedInt
+  ReqSkillRank  Int  @default(0) @db.UnsignedInt
+  ReqAbility1   Int  @default(0) @db.UnsignedInt
+  ReqAbility2   Int  @default(0) @db.UnsignedInt
+  ReqAbility3   Int  @default(0) @db.UnsignedInt
+  ReqLevel      Int  @default(0) @db.UnsignedTinyInt
+  VerifiedBuild Int?
+  raceMask      Int  @default(0) @db.UnsignedInt
+  classMask     Int  @default(0) @db.UnsignedInt
+
+  @@id([TrainerId, SpellId])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model transports {
+  guid       Int     @id @default(autoincrement()) @db.UnsignedInt
+  entry      Int     @unique(map: "idx_entry") @default(0) @db.UnsignedInt
+  name       String? @db.MediumText
+  ScriptName String  @default("") @db.Char(64)
+}
+
+model trinity_string {
+  entry           Int     @id @default(0) @db.UnsignedInt
+  content_default String  @db.MediumText
+  content_loc1    String? @db.MediumText
+  content_loc2    String? @db.MediumText
+  content_loc3    String? @db.MediumText
+  content_loc4    String? @db.MediumText
+  content_loc5    String? @db.MediumText
+  content_loc6    String? @db.MediumText
+  content_loc7    String? @db.MediumText
+  content_loc8    String? @db.MediumText
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model tswow_builds {
+  last_build BigInt @db.UnsignedBigInt
+
+  @@ignore
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model updates {
+  name      String        @id @db.VarChar(200)
+  hash      String?       @default("") @db.Char(40)
+  state     updates_state @default(RELEASED)
+  timestamp DateTime      @default(now()) @db.Timestamp(0)
+  speed     Int           @default(0) @db.UnsignedInt
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model updates_include {
+  path  String                @id @db.VarChar(200)
+  state updates_include_state @default(RELEASED)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model vehicle_accessory {
+  guid            Int    @default(0) @db.UnsignedInt
+  accessory_entry Int    @default(0) @db.UnsignedInt
+  seat_id         Int    @default(0) @db.TinyInt
+  minion          Int    @default(0) @db.UnsignedTinyInt
+  description     String @db.MediumText
+  summontype      Int    @default(6) @db.UnsignedTinyInt
+  summontimer     Int    @default(30000) @db.UnsignedInt
+
+  @@id([guid, seat_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model vehicle_seat_addon {
+  SeatEntry       Int      @id @db.UnsignedInt
+  SeatOrientation Float?   @default(0) @db.Float
+  ExitParamX      Float?   @default(0) @db.Float
+  ExitParamY      Float?   @default(0) @db.Float
+  ExitParamZ      Float?   @default(0) @db.Float
+  ExitParamO      Float?   @default(0) @db.Float
+  ExitParamValue  Boolean? @default(false)
+}
+
+model vehicle_template {
+  creatureId     Int @id @db.UnsignedInt
+  despawnDelayMs Int @default(0)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model vehicle_template_accessory {
+  entry           Int    @default(0) @db.UnsignedInt
+  accessory_entry Int    @default(0) @db.UnsignedInt
+  seat_id         Int    @default(0) @db.TinyInt
+  minion          Int    @default(0) @db.UnsignedTinyInt
+  description     String @db.MediumText
+  summontype      Int    @default(6) @db.UnsignedTinyInt
+  summontimer     Int    @default(30000) @db.UnsignedInt
+
+  @@id([entry, seat_id])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model version {
+  core_version  String  @id @default("") @db.VarChar(255)
+  core_revision String? @db.VarChar(120)
+  db_version    String? @db.VarChar(120)
+  cache_id      Int?    @default(0)
+}
+
+model warden_checks {
+  id      Int     @id @default(autoincrement()) @db.UnsignedSmallInt
+  type    Int?    @db.UnsignedTinyInt
+  str     String? @db.VarChar(170)
+  address Int?    @db.UnsignedInt
+  length  Int?    @db.UnsignedTinyInt
+  comment String? @db.VarChar(50)
+  data    Bytes?  @db.Binary(24)
+  result  Bytes?  @db.VarBinary(24)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model waypoint_data {
+  id            Int    @default(0) @db.UnsignedInt
+  point         Int    @default(0) @db.UnsignedInt
+  position_x    Float  @default(0) @db.Float
+  position_y    Float  @default(0) @db.Float
+  position_z    Float  @default(0) @db.Float
+  orientation   Float? @db.Float
+  delay         Int    @default(0) @db.UnsignedInt
+  move_type     Int    @default(0)
+  action        Int    @default(0)
+  action_chance Int    @default(100) @db.SmallInt
+  wpguid        Int    @default(0) @db.UnsignedInt
+
+  @@id([id, point])
+}
+
+model waypoint_scripts {
+  id        Int    @default(0) @db.UnsignedInt
+  delay     Int    @default(0) @db.UnsignedInt
+  command   Int    @default(0) @db.UnsignedInt
+  datalong  Int    @default(0) @db.UnsignedInt
+  datalong2 Int    @default(0) @db.UnsignedInt
+  dataint   Int    @default(0) @db.UnsignedInt
+  x         Float  @default(0) @db.Float
+  y         Float  @default(0) @db.Float
+  z         Float  @default(0) @db.Float
+  o         Float  @default(0) @db.Float
+  guid      Int    @id @default(0)
+  Comment   String @default("") @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model waypoints {
+  entry         Int     @default(0) @db.UnsignedInt
+  pointid       Int     @default(0) @db.UnsignedInt
+  position_x    Float   @default(0) @db.Float
+  position_y    Float   @default(0) @db.Float
+  position_z    Float   @default(0) @db.Float
+  orientation   Float?  @db.Float
+  delay         Int     @default(0) @db.UnsignedInt
+  point_comment String? @db.MediumText
+
+  @@id([entry, pointid])
+}
+
+enum updates_include_state {
+  RELEASED
+  ARCHIVED
+}
+
+enum updates_state {
+  RELEASED
+  ARCHIVED
+}
